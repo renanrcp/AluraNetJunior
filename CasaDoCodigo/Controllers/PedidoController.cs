@@ -31,7 +31,7 @@ namespace CasaDoCodigo.Controllers
         {
             buscaDeProdutosModel = buscaDeProdutosModel ?? new BuscaDeProdutosModel();
             buscaDeProdutosModel.Erros.Clear();
-            buscaDeProdutosModel.Produtos = await produtoRepository.GetProdutos(buscaDeProdutosModel.Pesquisa);
+            buscaDeProdutosModel.Produtos = await produtoRepository.GetProdutosAsync(buscaDeProdutosModel.Pesquisa);
             if (buscaDeProdutosModel.Produtos.Count <= 0)
                 buscaDeProdutosModel.Erros.Add("Nenhum produto encontrado.");
             return View(buscaDeProdutosModel);
@@ -39,7 +39,7 @@ namespace CasaDoCodigo.Controllers
 
         public async Task<IActionResult> Carrossel()
         {
-            return View(await produtoRepository.GetProdutos(""));
+            return View(await produtoRepository.GetProdutosAsync(""));
         }
 
         public async Task<IActionResult> Carrinho(string codigo)

@@ -6,8 +6,8 @@ namespace CasaDoCodigo.Repositories
 {
     public interface IProdutoRepository
     {
-        Task SaveProdutos(List<Livro> livros);
+        Task SaveProdutosAsync(List<Livro> livros);
 
-        Task<IList<Produto>> GetProdutos(string pesquisa);
+        Task<IList<Produto>> GetProdutosAsync(string pesquisa);
     }
 }

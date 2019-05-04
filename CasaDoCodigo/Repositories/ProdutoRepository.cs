@@ -18,7 +18,7 @@ namespace CasaDoCodigo.Repositories
             _categoriaRepository = categoriaRepository;
         }
 
-        public async Task<IList<Produto>> GetProdutos(string pesquisa)
+        public async Task<IList<Produto>> GetProdutosAsync(string pesquisa)
         {
             if (!string.IsNullOrWhiteSpace(pesquisa))
             {
@@ -27,7 +27,7 @@ namespace CasaDoCodigo.Repositories
             return await dbSet.Include(a => a.Categoria).ToListAsync();
         }
 
-        public async Task SaveProdutos(List<Livro> livros)
+        public async Task SaveProdutosAsync(List<Livro> livros)
         {
             foreach (var livro in livros)
             {
