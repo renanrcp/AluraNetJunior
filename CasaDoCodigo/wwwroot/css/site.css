@@ -1,4 +1,14 @@
-﻿body {
+﻿.pad-15-left{
+    padding-left: 15px !important;
+}
+.text-red {
+    color: #FF0000 !important;
+}
+
+.margin-20-top{
+    margin-top: 20px !important;
+}
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }

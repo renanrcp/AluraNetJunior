@@ -14,19 +14,32 @@ namespace CasaDoCodigo.Controllers
         private readonly IProdutoRepository produtoRepository;
         private readonly IPedidoRepository pedidoRepository;
         private readonly IItemPedidoRepository itemPedidoRepository;
+        private readonly ICategoriaRepository categoriaRepository;
 
         public PedidoController(IProdutoRepository produtoRepository,
             IPedidoRepository pedidoRepository,
-            IItemPedidoRepository itemPedidoRepository)
+            IItemPedidoRepository itemPedidoRepository,
+            ICategoriaRepository categoriaRepository)
         {
             this.produtoRepository = produtoRepository;
             this.pedidoRepository = pedidoRepository;
             this.itemPedidoRepository = itemPedidoRepository;
+            this.categoriaRepository = categoriaRepository;
         }
 
-        public IActionResult Carrossel()
+        public async Task<IActionResult> BuscaDeProdutos(BuscaDeProdutosModel buscaDeProdutosModel)
         {
-            return View(produtoRepository.GetProdutos());
+            buscaDeProdutosModel = buscaDeProdutosModel ?? new BuscaDeProdutosModel();
+            buscaDeProdutosModel.Erros.Clear();
+            buscaDeProdutosModel.Produtos = await produtoRepository.GetProdutos(buscaDeProdutosModel.Pesquisa);
+            if (buscaDeProdutosModel.Produtos.Count <= 0)
+                buscaDeProdutosModel.Erros.Add("Nenhum produto encontrado.");
+            return View(buscaDeProdutosModel);
+        }
+
+        public async Task<IActionResult> Carrossel()
+        {
+            return View(await produtoRepository.GetProdutos(""));
         }
 
         public async Task<IActionResult> Carrinho(string codigo)

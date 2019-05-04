@@ -2,7 +2,7 @@
 
 namespace CasaDoCodigo
 {
-    interface IDataService
+    internal interface IDataService
     {
         Task InicializaDB();
     }

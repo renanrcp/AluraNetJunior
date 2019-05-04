@@ -18,21 +18,27 @@ namespace CasaDoCodigo.Models
     {
         public Produto()
         {
-
         }
 
         [Required]
         public string Codigo { get; private set; }
+
         [Required]
         public string Nome { get; private set; }
+
         [Required]
         public decimal Preco { get; private set; }
 
-        public Produto(string codigo, string nome, decimal preco)
+        [Required]
+        [DataMember]
+        public virtual Categoria Categoria { get; set; }
+
+        public Produto(string codigo, string nome, decimal preco, Categoria categoria)
         {
             this.Codigo = codigo;
             this.Nome = nome;
             this.Preco = preco;
+            this.Categoria = categoria;
         }
     }
 
@@ -43,24 +49,33 @@ namespace CasaDoCodigo.Models
         }
 
         public virtual Pedido Pedido { get; set; }
+
         [MinLength(5, ErrorMessage = "Nome deve ter no mínimo 5 caracteres")]
         [MaxLength(50, ErrorMessage = "Nome deve ter no máximo 50 caracteres")]
         [Required(ErrorMessage = "Nome é obrigatório")]
         public string Nome { get; set; } = "";
+
         [Required(ErrorMessage = "Email é obrigatório")]
         public string Email { get; set; } = "";
+
         [Required(ErrorMessage = "Telefone é obrigatório")]
         public string Telefone { get; set; } = "";
+
         [Required(ErrorMessage = "Endereco é obrigatório")]
         public string Endereco { get; set; } = "";
+
         [Required(ErrorMessage = "Complemento é obrigatório")]
         public string Complemento { get; set; } = "";
+
         [Required(ErrorMessage = "Bairro é obrigatório")]
         public string Bairro { get; set; } = "";
+
         [Required(ErrorMessage = "Municipio é obrigatório")]
         public string Municipio { get; set; } = "";
+
         [Required(ErrorMessage = "UF é obrigatório")]
         public string UF { get; set; } = "";
+
         [Required(ErrorMessage = "CEP é obrigatório")]
         public string CEP { get; set; } = "";
 
@@ -80,25 +95,28 @@ namespace CasaDoCodigo.Models
 
     [DataContract]
     public class ItemPedido : BaseModel
-    {   
+    {
         [Required]
         [DataMember]
         public Pedido Pedido { get; private set; }
+
         [Required]
         [DataMember]
         public Produto Produto { get; private set; }
+
         [Required]
         [DataMember]
         public int Quantidade { get; private set; }
+
         [Required]
         [DataMember]
         public decimal PrecoUnitario { get; private set; }
+
         [DataMember]
         public decimal Subtotal => Quantidade * PrecoUnitario;
 
         public ItemPedido()
         {
-
         }
 
         public ItemPedido(Pedido pedido, Produto produto, int quantidade, decimal precoUnitario)
@@ -128,7 +146,18 @@ namespace CasaDoCodigo.Models
         }
 
         public List<ItemPedido> Itens { get; private set; } = new List<ItemPedido>();
+
         [Required]
         public virtual Cadastro Cadastro { get; private set; }
+    }
+
+    public class Categoria : BaseModel
+    {
+        public Categoria()
+        {
+        }
+
+        public virtual List<Produto> Produtos { get; set; }
+        public string Nome { get; set; }
     }
 }

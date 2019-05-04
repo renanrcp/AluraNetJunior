@@ -1,7 +1,9 @@
 ﻿using CasaDoCodigo.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,13 +11,20 @@ namespace CasaDoCodigo.Repositories
 {
     public class ProdutoRepository : BaseRepository<Produto>, IProdutoRepository
     {
-        public ProdutoRepository(ApplicationContext contexto) : base(contexto)
+        private ICategoriaRepository _categoriaRepository { get; set; }
+
+        public ProdutoRepository(ApplicationContext contexto, ICategoriaRepository categoriaRepository) : base(contexto)
         {
+            _categoriaRepository = categoriaRepository;
         }
 
-        public IList<Produto> GetProdutos()
+        public async Task<IList<Produto>> GetProdutos(string pesquisa)
         {
-            return dbSet.ToList();
+            if (!string.IsNullOrWhiteSpace(pesquisa))
+            {
+                return await dbSet.Include(a => a.Categoria).Where(a => a.Nome.Contains(pesquisa) || a.Categoria.Nome.Contains(pesquisa)).ToListAsync();
+            }
+            return await dbSet.Include(a => a.Categoria).ToListAsync();
         }
 
         public async Task SaveProdutos(List<Livro> livros)
@@ -24,7 +33,7 @@ namespace CasaDoCodigo.Repositories
             {
                 if (!dbSet.Where(p => p.Codigo == livro.Codigo).Any())
                 {
-                    dbSet.Add(new Produto(livro.Codigo, livro.Nome, livro.Preco));
+                    dbSet.Add(new Produto(livro.Codigo, livro.Nome, livro.Preco, await _categoriaRepository.GetOrCreateCategoryAsync(livro.Categoria)));
                 }
             }
             await contexto.SaveChangesAsync();

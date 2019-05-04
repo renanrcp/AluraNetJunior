@@ -16,10 +16,9 @@ namespace CasaDoCodigo
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Produto>().HasKey(t => t.Id);
-
+            modelBuilder.Entity<Produto>().HasKey(a => a.Id);
+            modelBuilder.Entity<Categoria>().HasKey(a => a.Id);
+            modelBuilder.Entity<Produto>().HasOne(a => a.Categoria).WithMany(a => a.Produtos).IsRequired();
             modelBuilder.Entity<Pedido>().HasKey(t => t.Id);
             modelBuilder.Entity<Pedido>().HasMany(t => t.Itens).WithOne(t => t.Pedido);
             modelBuilder.Entity<Pedido>().HasOne(t => t.Cadastro).WithOne(t => t.Pedido).IsRequired();
@@ -30,6 +29,7 @@ namespace CasaDoCodigo
 
             modelBuilder.Entity<Cadastro>().HasKey(t => t.Id);
             modelBuilder.Entity<Cadastro>().HasOne(t => t.Pedido);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
