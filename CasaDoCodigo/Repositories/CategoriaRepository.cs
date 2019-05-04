@@ -10,8 +10,6 @@ namespace CasaDoCodigo.Repositories
 {
     public interface ICategoriaRepository
     {
-        IList<Categoria> GetCategorias();
-
         Task<Categoria> GetOrCreateCategoryAsync(string Name);
     }
 
@@ -19,11 +17,6 @@ namespace CasaDoCodigo.Repositories
     {
         public CategoriaRepository(ApplicationContext contexto) : base(contexto)
         {
-        }
-
-        public IList<Categoria> GetCategorias()
-        {
-            return dbSet.ToList();
         }
 
         public async Task<Categoria> GetOrCreateCategoryAsync(string Name)
